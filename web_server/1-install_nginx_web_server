@@ -1,7 +1,19 @@
 #!/usr/bin/env bash
-# Install nginx web server
+# 1-install_nginx_web_server
 
-sudo apt-get update -y
-sudo apt-get install -y nginx
-sudo echo "Holberton School" > /var/www/html/index.nginx-debian.html
-sudo service nginx restart
+# Update package lists and install nginx
+apt-get update -y
+apt-get install nginx -y
+
+# Ensure nginx listens on port 80
+# Backup original config just in case
+cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
+
+# Replace the listen directive with port 80
+sed -i 's/\(listen \)[0-9]\+\(.*\)/\180\2/' /etc/nginx/sites-available/default
+
+# Create the index.html file with required content
+echo "Holberton School for the win!" > /var/www/html/index.html
+
+# Restart nginx without using systemctl
+service nginx restart
